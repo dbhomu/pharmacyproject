@@ -66,12 +66,14 @@ public class Patient {
     }
 
     public void setDOB(String DOB) {
-        if(DOB.length() != 8) {
-            throw new RuntimeException("Date of birth invalid!");
+        if (DOB == null) {
+            throw new RuntimeException("Date of birth Required!");
         }
-        this.DOB = DOB;
 
+        this.DOB = DOB;
     }
+
+
 
     public String getGender() {
         return gender;

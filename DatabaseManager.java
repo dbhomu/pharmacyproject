@@ -128,6 +128,34 @@
             }
         }
 
+        public void modifyPatient(int patientID, Patient p) {
+            try {
+                Connection conn = DriverManager.getConnection(URL,USER,PASS);
+                String sql = "UPDATE patients SET firstName = ?, lastName = ?, DOB = ?, gender = ?, phoneNumber = ?, " +
+                        "street1 = ?, street2 = ?, city = ?, state = ?, ZIP = ?, country = ? " +
+                        "WHERE patientID = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, p.getFirstName());
+                ps.setString(2, p.getLastName());
+                ps.setString(3, p.getDOB());
+                ps.setString(4, p.getGender());
+                ps.setString(5, p.getPhoneNumber());
+                ps.setString(6, p.getStreet1());
+                ps.setString(7, p.getStreet2());
+                ps.setString(8, p.getCity());
+                ps.setString(9, p.getState());
+                ps.setString(10, p.getZIP());
+                ps.setString(11, p.getCountry());
+                ps.setInt(12, patientID);
+
+                ps.executeUpdate();
+                ps.close();
+                System.out.println("Patient updated successfully!");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        }
 
 
 
