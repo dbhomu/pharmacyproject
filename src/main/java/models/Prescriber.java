@@ -29,60 +29,91 @@ public class Prescriber {
         this.country = country;
     }
 
+    // Main combined check
     public static boolean isValidNPI(String npi) {
         if (npi == null || npi.length() != 10) return false;
+
+        // 1️⃣ Modern NPI: 80840 + first 9 digits
+        if (passes80840Luhn(npi)) return true;
+
+        // 2️⃣ Legacy/alternate: plain 10-digit Luhn
+        if (passesPlainLuhn(npi)) return true;
+
+        return false; // fails both
+    }
+
+    // Modern 80840 + Luhn check
+    private static boolean passes80840Luhn(String npi) {
         String firstNine = npi.substring(0, 9);
-        String fullNPI = "80840" + firstNine;
-        int checkDigit = Character.getNumericValue(npi.charAt(9));
+        String fullNPI = "80840" + firstNine; // 15 digits
         int sum = 0;
-        for (int i = 0; i < fullNPI.length(); i++) {
-            char nums = fullNPI.charAt(i);
-            int digit = Character.getNumericValue(nums);
-            if (i % 2 != 0) {
+
+        // Process from RIGHT to LEFT
+        for (int i = fullNPI.length() - 1; i >= 0; i--) {
+            int digit = Character.getNumericValue(fullNPI.charAt(i));
+            int positionFromRight = fullNPI.length() - 1 - i;
+
+            if (positionFromRight % 2 == 0) { // double every second digit starting from right
                 digit *= 2;
-                if (digit > 9) {
-                    digit = (digit / 10) + (digit % 10);
-                }
+                if (digit > 9) digit = (digit / 10) + (digit % 10);
             }
             sum += digit;
-
-
         }
-        sum += checkDigit;
+
+        int checkDigit = sum % 10;
+        return checkDigit == Character.getNumericValue(npi.charAt(9));
+    }
+
+    // Legacy/simple 10-digit Luhn
+    private static boolean passesPlainLuhn(String npi) {
+        int sum = 0;
+        for (int i = npi.length() - 1; i >= 0; i--) {
+            int digit = Character.getNumericValue(npi.charAt(i));
+            int positionFromRight = npi.length() - 1 - i;
+
+            if (positionFromRight % 2 == 1) { // standard Luhn doubling pattern
+                digit *= 2;
+                if (digit > 9) digit = (digit / 10) + (digit % 10);
+            }
+            sum += digit;
+        }
+
         return sum % 10 == 0;
-    }   
+    }
+
+
+
 
     public static boolean isValidDEA(String DEA) {
-        if(DEA == null || DEA.isBlank()) return true;
+        if (DEA == null || DEA.isBlank()) return false;
 
-        if(DEA.length() != 9) {
-            return false;
-        }
+        if (DEA.length() != 9) return false;
 
-        String deaNumbers = DEA.substring(2, 8); // digits 3–8 (7 digits)
-        int evenSum = 0;
-        int oddSum = 0;
+        // get digits 3–8 (indices 2–7)
+        String digits = DEA.substring(2, 8);
 
-        for (int i = 0; i < deaNumbers.length(); i++) {
-            int digit = Character.getNumericValue(deaNumbers.charAt(i));
+        int sumOdd = 0;   // D1 + D3 + D5
+        int sumEven = 0;  // D2 + D4 + D6
 
+        for (int i = 0; i < 6; i++) {
+            int digit = Character.getNumericValue(digits.charAt(i));
             if (i % 2 == 0) {
-                evenSum += digit;     // positions 1,3,5 AKA indices 0,2,4
+                sumOdd += digit;
             } else {
-                oddSum += digit;      // positions 2,4,6 AKA indices 1,3,5
+                sumEven += digit;
             }
         }
 
-        oddSum *= 2; // double the ODD indices
+        sumEven *= 2;
 
-        int totalSum = oddSum + evenSum;
-        int lastDigit = totalSum % 10;
+        int total = sumOdd + sumEven;
+        int checkDigit = total % 10;
 
-        int checkDigit = Character.getNumericValue(DEA.charAt(8));
+        int lastDigit = Character.getNumericValue(DEA.charAt(8)); // D7
 
-        return lastDigit == checkDigit;
-
+        return checkDigit == lastDigit;
     }
+
 
 
     public String getFirstName() {

@@ -54,23 +54,27 @@ public class PatientController {
             return;
         }
 
-        // Create patient and save
-        Patient patient = new Patient(
-                firstNameField.getText(),
-                lastNameField.getText(),
-                dob,
-                genderField.getText(),
-                phoneNumberField.getText(),
-                street1Field.getText(),
-                street2Field.getText(),
-                cityField.getText(),
-                stateField.getText(),
-                zipField.getText(),
-                countryField.getText(),
-                allergiesField.getText()
-        );
+        try {
 
-        db.addPatient(patient);
+            Patient patient = new Patient(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    dob,
+                    genderField.getText(),
+                    phoneNumberField.getText(),
+                    street1Field.getText(),
+                    street2Field.getText(),
+                    cityField.getText(),
+                    stateField.getText(),
+                    zipField.getText(),
+                    countryField.getText(),
+                    allergiesField.getText()
+            );
+
+            db.addPatient(patient);
+        } catch (RuntimeException e) {
+            showAlert(e.getMessage());
+        }
         showAlert("Patient added successfully!");
         clearFields();
     }
