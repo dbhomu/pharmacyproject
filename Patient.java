@@ -1,9 +1,11 @@
-import java.sql.SQLOutput;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Patient {
     private String firstName;
     private String lastName;
-    private String DOB;
+    private LocalDate DOB;
     private String gender;
     private String phoneNumber;
     private String street1;
@@ -14,12 +16,12 @@ public class Patient {
     private String country;
     private String allergies;
 
-    public Patient(String firstName, String lastName, String DOB) {
+    public Patient(String firstName, String lastName, LocalDate DOB) {
         setFirstName(firstName);
         setLastName(lastName);
         setDOB(DOB);
     }
-    public Patient(String firstName, String lastName, String DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country, String allergies) {
+    public Patient(String firstName, String lastName, LocalDate DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country, String allergies) {
 
         setFirstName(firstName);
         setLastName(lastName);
@@ -61,11 +63,11 @@ public class Patient {
         this.lastName = lastName;
     }
 
-    public String getDOB() {
+    public LocalDate getDOB() {
         return DOB;
     }
 
-    public void setDOB(String DOB) {
+    public void setDOB(LocalDate DOB) {
         if (DOB == null) {
             throw new RuntimeException("Date of birth Required!");
         }

@@ -124,6 +124,9 @@ public class Drug {
     }
 
     public void setLocation(String location) {
+        if(location.isBlank()) {
+            throw new RuntimeException("Drug must have a location");
+        }
         this.location = location;
     }
 }

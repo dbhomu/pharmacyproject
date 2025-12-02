@@ -1,4 +1,5 @@
     import java.sql.*;
+    import java.time.LocalDate;
     import java.util.List;
     import java.util.ArrayList;
     import java.util.function.BiConsumer;
@@ -9,14 +10,14 @@
         private static final String USER = "root";
         private static final String PASS = "Mu$abGmai1";
 
-        public ArrayList<Patient> searchPatient(String firstName, String lastName, String DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country) {
+        public ArrayList<Patient> searchPatient(String firstName, String lastName, LocalDate DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country) {
             ArrayList<Patient> results = new ArrayList<>();
             try {
                 Connection conn = DriverManager.getConnection(URL,USER,PASS);
                 String sql = "SELECT * FROM patients WHERE 1=1";
                 if(!firstName.isEmpty()) sql += " AND firstName = ?";
                 if(!lastName.isEmpty()) sql += " AND lastName = ?";
-                if(!DOB.isEmpty()) sql += " AND DOB = ?";
+                if(DOB != null) sql += " AND DOB = ?";
                 if(!gender.isEmpty()) sql += " AND gender = ?";
                 if(!phoneNumber.isEmpty()) sql += " AND phoneNumber = ?";
                 if(!street1.isEmpty()) sql += " AND street1 = ?";
@@ -30,7 +31,7 @@
                 int index = 1;
                 if (!firstName.isEmpty()) ps.setString(index++, firstName);
                 if (!lastName.isEmpty())  ps.setString(index++, lastName);
-                if (!DOB.isEmpty())       ps.setString(index++, DOB);
+                if (DOB != null)       ps.setObject(index++, DOB);
                 if (!gender.isEmpty()) ps.setString(index++, gender);
                 if(!phoneNumber.isEmpty()) ps.setString(index++, phoneNumber);
                 if(!street1.isEmpty()) ps.setString(index++,street1);
@@ -42,10 +43,10 @@
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     // Create Patient object from current row
-                    Patient p = new Patient(
+                    Patient patient = new Patient(
                             rs.getString("firstName"),
                             rs.getString("lastName"),
-                            rs.getString("DOB"),
+                            (LocalDate) rs.getObject("DOB"),
                             rs.getString("gender"),
                             rs.getString("phoneNumber"),
                             rs.getString("street1"),
@@ -56,7 +57,7 @@
                             rs.getString("country"),
                             rs.getString("allergies")
                     );
-                    results.add(p); // Add to results list
+                    results.add(patient); // Add to results list
                 }
                 rs.close();
                 ps.close();
@@ -108,7 +109,7 @@
 
                 ps.setString(1, p.getFirstName());
                 ps.setString(2, p.getLastName());
-                ps.setString(3, p.getDOB());
+                ps.setObject(3, p.getDOB());
                 ps.setString(4, p.getGender());
                 ps.setString(5, p.getPhoneNumber());
                 ps.setString(6, p.getStreet1());
@@ -137,7 +138,7 @@
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, p.getFirstName());
                 ps.setString(2, p.getLastName());
-                ps.setString(3, p.getDOB());
+                ps.setObject(3, p.getDOB());
                 ps.setString(4, p.getGender());
                 ps.setString(5, p.getPhoneNumber());
                 ps.setString(6, p.getStreet1());
