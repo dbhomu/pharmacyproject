@@ -90,7 +90,9 @@ public class Prescriber {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if(!firstName.matches("[A-Za-z]+")) {
+            throw new RuntimeException("Invalid first name!");
+        }
     }
 
     public String getLastName() {
@@ -98,7 +100,9 @@ public class Prescriber {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if(!lastName.matches("[A-Za-z]+")) {
+            throw new RuntimeException("Invalid last name!");
+        }
     }
 
     public String getNPI() {
@@ -129,6 +133,9 @@ public class Prescriber {
     }
 
     public void setPhoneNumber(String phoneNumber) {
+        if(phoneNumber.length() != 10 || phoneNumber.isBlank()) {
+            throw new RuntimeException("Invalid Phone Number length!");
+        }
         this.phoneNumber = phoneNumber;
     }
 
@@ -137,7 +144,9 @@ public class Prescriber {
     }
 
     public void setFaxNumber(String faxNumber) {
-        this.faxNumber = faxNumber;
+        if(faxNumber.length() != 10 || faxNumber.isBlank()) {
+            throw new RuntimeException("Invalid Fax Number Length!");
+        }
     }
 
     public String getStreet1() {
@@ -145,8 +154,12 @@ public class Prescriber {
     }
 
     public void setStreet1(String street1) {
+        if(street1.isEmpty()) {
+            throw new RuntimeException("Address cannot be blank!");
+        }
         this.street1 = street1;
     }
+
 
     public String getStreet2() {
         return street2;
@@ -161,6 +174,9 @@ public class Prescriber {
     }
 
     public void setCity(String city) {
+        if(city.isEmpty()) {
+            throw new RuntimeException("City cannot be blank!");
+        }
         this.city = city;
     }
 
@@ -169,7 +185,10 @@ public class Prescriber {
     }
 
     public void setState(String state) {
-        this.state = state;
+       if(state.isBlank()) {
+           throw new RuntimeException("Invalid State!");
+       }
+       this.state = state;
     }
 
     public String getZIP() {
@@ -177,6 +196,9 @@ public class Prescriber {
     }
 
     public void setZIP(String ZIP) {
+        if(ZIP.length() != 5 || ZIP.length() != 9 || ZIP.isEmpty()) {
+            throw new RuntimeException("Invalid ZIP!");
+        }
         this.ZIP = ZIP;
     }
 
@@ -185,6 +207,9 @@ public class Prescriber {
     }
 
     public void setCountry(String country) {
+        if(country.isEmpty()) {
+            throw new RuntimeException("Country cannot be blank");
+        }
         this.country = country;
     }
 }

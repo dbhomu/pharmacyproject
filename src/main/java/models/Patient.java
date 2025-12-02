@@ -108,8 +108,10 @@ public class Patient {
     }
 
     public void setStreet1(String street1) {
+
         this.street1 = street1;
     }
+
 
     public String getStreet2() {
         return street2;
@@ -124,6 +126,7 @@ public class Patient {
     }
 
     public void setCity(String city) {
+
         this.city = city;
     }
 
