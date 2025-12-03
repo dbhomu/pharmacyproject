@@ -46,7 +46,7 @@ import java.sql.*;
                     Patient patient = new Patient(
                             rs.getString("firstName"),
                             rs.getString("lastName"),
-                            (LocalDate) rs.getObject("DOB"),
+                            rs.getDate("DOB").toLocalDate(),
                             rs.getString("gender"),
                             rs.getString("phoneNumber"),
                             rs.getString("street1"),

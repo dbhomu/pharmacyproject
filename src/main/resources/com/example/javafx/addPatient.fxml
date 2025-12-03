@@ -22,7 +22,8 @@
         <TextField fx:id="countryField" alignment="CENTER" layoutX="327.0" layoutY="245.0" promptText="Country" />
 
         <!-- Buttons at the end -->
-        <Button fx:id="addPatientButton" layoutX="84.0" layoutY="320.0" mnemonicParsing="false" onAction="#addPatientButton" prefHeight="25.0" prefWidth="110.0" text="Add" />
-      <Button layoutX="347.0" layoutY="320.0" mnemonicParsing="false" onAction="#goToMenu" prefHeight="25.0" prefWidth="110.0" text="Back" />
+        <Button fx:id="addPatientButton" layoutX="224.0" layoutY="320.0" mnemonicParsing="false" onAction="#addPatientButton" prefHeight="25.0" prefWidth="110.0" text="Add" />
+      <Button layoutX="352.0" layoutY="320.0" mnemonicParsing="false" onAction="#goToMenu" prefHeight="25.0" prefWidth="110.0" text="Back" />
+      <Button layoutX="89.0" layoutY="320.0" mnemonicParsing="false" onAction="#searchPatientButton" prefHeight="26.0" prefWidth="110.0" text="Search" />
     </children>
 </AnchorPane>

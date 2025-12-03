@@ -32,7 +32,7 @@ public class Patient {
         this.street2 = street2;
         this.city = city;
         this.state = state;
-        this.ZIP = ZIP;
+        setZIP(ZIP);
         this.country = country;
         this.allergies = allergies;
 
@@ -143,7 +143,11 @@ public class Patient {
     }
 
     public void setZIP(String ZIP) {
+        if (!(ZIP.length() == 5 || ZIP.length() == 9)) {
+            throw new RuntimeException("Invalid ZIP!");
+        }
         this.ZIP = ZIP;
+
     }
 
     public String getCountry() {
