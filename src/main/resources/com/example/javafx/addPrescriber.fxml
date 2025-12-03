@@ -10,7 +10,7 @@
         <TextField fx:id="firstNameField" layoutX="84.0" layoutY="48.0" promptText="First Name (required)" />
         <TextField fx:id="lastNameField" layoutX="84.0" layoutY="93.0" promptText="Last Name (required)" />
         <TextField fx:id="npiField" layoutX="84.0" layoutY="142.0" promptText="NPI (required)" />
-        <TextField fx:id="deaField" layoutX="84.0" layoutY="188.0" promptText="DEA (required)" />
+        <TextField fx:id="deaField" layoutX="84.0" layoutY="188.0" promptText="DEA" />
         <TextField fx:id="phoneNumberField" layoutX="84.0" layoutY="235.0" promptText="Phone Number (required)" />
         <TextField fx:id="faxNumberField" layoutX="84.0" layoutY="280.0" promptText="Fax Number (required)" />
 

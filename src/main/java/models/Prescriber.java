@@ -78,6 +78,7 @@ public class Prescriber {
         if(!firstName.matches("[A-Za-z]+")) {
             throw new RuntimeException("Invalid first name!");
         }
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -88,6 +89,7 @@ public class Prescriber {
         if(!lastName.matches("[A-Za-z]+")) {
             throw new RuntimeException("Invalid last name!");
         }
+        this.lastName = lastName;
     }
 
     public String getNPI() {
@@ -132,6 +134,7 @@ public class Prescriber {
         if(faxNumber.length() != 10 || faxNumber.isBlank()) {
             throw new RuntimeException("Invalid Fax Number Length!");
         }
+        this.faxNumber = faxNumber;
     }
 
     public String getStreet1() {
@@ -184,6 +187,7 @@ public class Prescriber {
         if (!(ZIP.length() == 5 || ZIP.length() == 9)) {
             throw new RuntimeException("Invalid ZIP!");
         }
+        this.ZIP = ZIP;
 
     }
 

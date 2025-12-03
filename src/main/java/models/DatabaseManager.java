@@ -88,7 +88,7 @@ import java.sql.*;
                 ps.setString(12, p.getCountry());
 
                 ps.executeUpdate();
-                System.out.println("models.Prescriber added successfully!");
+                System.out.println("Prescriber added successfully!");
 
                 ps.close();
                 conn.close();
