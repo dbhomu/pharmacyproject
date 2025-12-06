@@ -7,23 +7,24 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.PrescriberController">
     <children>
         <!-- Left column -->
-        <TextField fx:id="firstNameField" layoutX="84.0" layoutY="48.0" promptText="First Name (required)" />
-        <TextField fx:id="lastNameField" layoutX="84.0" layoutY="93.0" promptText="Last Name (required)" />
-        <TextField fx:id="npiField" layoutX="84.0" layoutY="142.0" promptText="NPI (required)" />
-        <TextField fx:id="deaField" layoutX="84.0" layoutY="188.0" promptText="DEA" />
-        <TextField fx:id="phoneNumberField" layoutX="84.0" layoutY="235.0" promptText="Phone Number (required)" />
-        <TextField fx:id="faxNumberField" layoutX="84.0" layoutY="280.0" promptText="Fax Number (required)" />
+        <TextField fx:id="firstNameField" layoutX="35.0" layoutY="48.0" promptText="First Name (required)" />
+        <TextField fx:id="lastNameField" layoutX="35.0" layoutY="95.0" promptText="Last Name (required)" />
+        <TextField fx:id="npiField" layoutX="35.0" layoutY="144.0" promptText="NPI (required)" />
+        <TextField fx:id="deaField" layoutX="35.0" layoutY="190.0" promptText="DEA" />
+        <TextField fx:id="phoneNumberField" layoutX="35.0" layoutY="237.0" promptText="Phone Number (required)" />
+        <TextField fx:id="faxNumberField" layoutX="35.0" layoutY="282.0" promptText="Fax Number (required)" />
 
         <!-- Right column -->
-        <TextField fx:id="street1Field" layoutX="332.0" layoutY="48.0" promptText="Street 1 (required)" />
-        <TextField fx:id="street2Field" layoutX="332.0" layoutY="93.0" promptText="Street 2 (required)" />
-        <TextField fx:id="cityField" layoutX="332.0" layoutY="142.0" promptText="City (required)" />
-        <TextField fx:id="stateField" layoutX="332.0" layoutY="188.0" promptText="State (required)" />
-        <TextField fx:id="zipField" layoutX="332.0" layoutY="235.0" promptText="ZIP (required)" />
-        <TextField fx:id="countryField" layoutX="332.0" layoutY="280.0" promptText="Country (required)" />
+        <TextField fx:id="street1Field" layoutX="365.0" layoutY="48.0" promptText="Street 1 (required)" />
+        <TextField fx:id="street2Field" layoutX="365.0" layoutY="93.0" promptText="Street 2 (required)" />
+        <TextField fx:id="cityField" layoutX="365.0" layoutY="142.0" promptText="City (required)" />
+        <TextField fx:id="stateField" layoutX="365.0" layoutY="188.0" promptText="State (required)" />
+        <TextField fx:id="zipField" layoutX="365.0" layoutY="235.0" promptText="ZIP (required)" />
+        <TextField fx:id="countryField" layoutX="365.0" layoutY="280.0" promptText="Country (required)" />
 
         <!-- Add Prescriber button -->
-        <Button fx:id="addPrescriberButton" layoutX="109.0" layoutY="333.0" onAction="#addPrescriberButton" prefHeight="25.0" prefWidth="99.0" text="Add" />
-      <Button layoutX="332.0" layoutY="333.0" mnemonicParsing="false" onAction="#goToMenu" prefHeight="25.0" prefWidth="110.0" text="Back" />
+        <Button fx:id="addPrescriberButton" layoutX="60.0" layoutY="333.0" onAction="#addPrescriberButton" prefHeight="25.0" prefWidth="99.0" text="Add" />
+      <Button layoutX="385.0" layoutY="333.0" mnemonicParsing="false" onAction="#goToMenu" prefHeight="25.0" prefWidth="110.0" text="Back" />
+      <Button layoutX="224.0" layoutY="333.0" mnemonicParsing="false" onAction="#searchPrescriberButton" prefHeight="25.0" prefWidth="110.0" text="Search" />
     </children>
 </AnchorPane>

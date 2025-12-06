@@ -8,8 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.DatabaseManager;
 import models.Prescriber;
+import models.Prescription;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PrescriberController {
 
@@ -82,6 +84,49 @@ public class PrescriberController {
         stateField.clear();
         zipField.clear();
         countryField.clear();
+    }
+
+    @FXML
+    private void searchPrescriberButton(ActionEvent actionEvent) {
+        ArrayList<Prescriber> results = db.searchPrescriber(
+                firstNameField.getText(),
+                lastNameField.getText(),
+                npiField.getText(),
+                deaField.getText(),
+                phoneNumberField.getText(),
+                faxNumberField.getText(),
+                street1Field.getText(),
+                street2Field.getText(),
+                cityField.getText(),
+                stateField.getText(),
+                zipField.getText(),
+                countryField.getText()
+
+
+
+
+        );
+        if(results.isEmpty()) {
+            showAlert("No Prescriber found");
+            return;
+        }
+
+        Prescriber prescriber = results.get(0);
+
+        firstNameField.setText(prescriber.getFirstName());
+        lastNameField.setText(prescriber.getLastName());
+        npiField.setText(prescriber.getNPI());
+        deaField.setText(prescriber.getDEA());
+        phoneNumberField.setText(prescriber.getPhoneNumber());
+        faxNumberField.setText(prescriber.getFaxNumber());
+        street1Field.setText(prescriber.getStreet1());
+        street2Field.setText(prescriber.getStreet2());
+        cityField.setText(prescriber.getCity());
+        stateField.setText(prescriber.getState());
+        zipField.setText(prescriber.getZIP());
+        countryField.setText(prescriber.getCountry());
+
+
     }
 
 

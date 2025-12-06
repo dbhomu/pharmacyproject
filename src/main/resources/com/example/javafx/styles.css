@@ -1,0 +1,25 @@
+/* styles.css */
+#usernameField, #passwordField {
+    -fx-background-color: transparent; /* makes background see-through */
+        -fx-border-width: 0 0 1 0;        /* top right bottom left */
+        -fx-border-color: #502785;           /* color of the “underline” */
+
+}
+
+#loginBtn {
+
+    -fx-background-color: #502785;
+     -fx-text-fill: #FFFFFF;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+
+}
+
+
+#loginBtn:hover {
+    -fx-background-color: #5E4CB2;
+}
+
+.username-label {
+    -fx-font-weight: bold;
+}

@@ -82,12 +82,7 @@ public class Patient {
     }
 
     public void setGender(String gender) {
-        if(gender.isEmpty()) {
-            this.gender = "unknown";
-        }
-        else {
-            this.gender = gender;
-        }
+        this.gender = gender;
 
 
     }
