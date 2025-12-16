@@ -1,19 +1,22 @@
 package com.example.javafx;
 
-import com.example.javafx.SceneManager;
-
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -72,6 +75,8 @@ public class LoginController {
     }
 
 
+    @FXML
+    private Label loginResult;
 
     @FXML
     private void loginBtn(ActionEvent event) throws IOException {
@@ -79,23 +84,36 @@ public class LoginController {
         String password = passwordField.getText().trim();
 
         if (username.isEmpty()) {
-            System.out.println("Username is required");
-            return; // stops login
+            loginResult.setText("Username is required");
+            return;
         }
 
         if (password.isEmpty()) {
-            System.out.println("Password is required");
-            return; // stops login
+            loginResult.setText("Password is required");
+            return;
         }
 
         if (DatabaseManager.validateLogin(username, password)) {
-            System.out.println("Login successful!");
+            loginResult.setTextFill(Color.GREEN);
+            loginResult.setText("Login Successful!");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javafx/menu.fxml"));
+            Parent root = loader.load(); // load menu.fxml
+
+            MenuController controller = loader.getController(); // get the controller
+            controller.setUsernameLabel(username); // pass the typed username
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            SceneManager.switchScene(stage, "/com/example/javafx/menu.fxml");
+            stage.setScene(new Scene(root));
+            stage.setResizable(true);
+            stage.show();
         } else {
-            System.out.println("Invalid credentials");
+            loginResult.setText("Invalid Username or Password!");
         }
     }
+
+
+
 
 
 

@@ -16,31 +16,7 @@
         <URL value="@styles.css" />
     </stylesheets>
    <children>
-      <VBox layoutX="400.0" prefHeight="600.0" prefWidth="397.0" spacing="40.0">
-         <children>
-            <Label style="-fx-font-weight: bold;" styleClass="username-label" text="Username">
-               <font>
-                  <Font name="MinionPro-Disp" size="34.0" />
-               </font>
-            </Label>
-            <TextField fx:id="usernameField" promptText="Username" />
-            <Label text="Password">
-               <font>
-                  <Font name="MinionPro-Disp" size="34.0" />
-               </font>
-            </Label>
-            <PasswordField fx:id="passwordField" promptText="Password" />
-            <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#loginBtn" prefHeight="36.0" prefWidth="266.0" text="Login" textAlignment="CENTER">
-               <font>
-                  <Font name="MinionPro-Disp" size="12.0" />
-               </font>
-            </Button>
-         </children>
-         <padding>
-            <Insets top="120.0" />
-         </padding>
-      </VBox>
-      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="397.0" style="-fx-background-color: #141414;">
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #141414;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fx:id="titleText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="257.3119812011719">
                <font>
@@ -48,6 +24,37 @@
                </font>
             </Text>
          </children>
+      </VBox>
+      <VBox fillWidth="false" layoutX="400.0" prefHeight="600.0" prefWidth="400.0" spacing="30.0">
+         <children>
+            <Label contentDisplay="TOP" text="Username">
+               <VBox.margin>
+                  <Insets top="200.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="MinionPro-Disp" size="44.0" />
+               </font>
+            </Label>
+            <TextField fx:id="usernameField" />
+            <Label text="Password">
+               <font>
+                  <Font name="MinionPro-Disp" size="44.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="passwordField" />
+            <Button mnemonicParsing="false" onAction="#loginBtn" prefHeight="24.0" prefWidth="149.0" text="Sign in">
+               <font>
+                  <Font name="MinionPro-Disp" size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="loginResult" textFill="RED" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

@@ -1,25 +1,27 @@
-/* styles.css */
-#usernameField, #passwordField {
-    -fx-background-color: transparent; /* makes background see-through */
-        -fx-border-width: 0 0 1 0;        /* top right bottom left */
-        -fx-border-color: #502785;           /* color of the “underline” */
+.tab-pane .tab-label {
+    -fx-font-family: "Minion Pro Display";
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+
+
+
 
 }
 
-#loginBtn {
-
-    -fx-background-color: #502785;
-     -fx-text-fill: #FFFFFF;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-
+.tab-header-background {
+    -fx-background-color: #0F0F0F;
 }
 
-
-#loginBtn:hover {
-    -fx-background-color: #5E4CB2;
+.tab {
+    -fx-padding: 10 50 10 50;
+    -fx-background-color: transparent;
+    -fx-background-radius: 5px;
 }
 
-.username-label {
-    -fx-font-weight: bold;
+.profile-image {
+-fx-background-radius: 50%;
+-fx-border-radius: 50%;
+-fx-border-width: 1px;
+-fx-border-color: black;
+
 }

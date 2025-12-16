@@ -30,15 +30,10 @@ public class PrescriberController {
     @FXML private TextField zipField;
     @FXML private TextField countryField;
 
-    @FXML
 
-    private void goToMenu(ActionEvent event) throws IOException {
-        // Get the current stage from the button click
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        // Call your SceneManager method
-        SceneManager.switchScene(stage, "/com/example/javafx/menu.fxml");
-    }
+
+
         @FXML
     private void addPrescriberButton(ActionEvent event) {
         try {

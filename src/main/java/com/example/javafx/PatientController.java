@@ -33,14 +33,7 @@ public class PatientController {
     @FXML private TextField countryField;
     @FXML private TextField allergiesField;
 
-    @FXML
-    private void goToMenu(ActionEvent event) throws IOException {
-        // Get the current stage from the button click
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        // Call your SceneManager method
-        SceneManager.switchScene(stage, "/com/example/javafx/menu.fxml");
-    }
     @FXML
     private void addPatientButton(ActionEvent event) {
         // Validate DOB

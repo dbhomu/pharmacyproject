@@ -10,7 +10,7 @@ import java.sql.*;
         private static final String USER = "root";
         private static final String PASS = "Mu$abGmai1";
 
-        public ArrayList<Patient> searchPatient(
+        public static ArrayList<Patient> searchPatient(
                 String firstName, String lastName, LocalDate DOB,
                 String gender, String phoneNumber, String street1,
                 String street2, String city, String state,
@@ -34,32 +34,32 @@ import java.sql.*;
 
                 String sql = "SELECT * FROM patients WHERE 1=1";
 
-                if (!firstName.isEmpty()) sql += " AND firstName = ?";
-                if (!lastName.isEmpty()) sql += " AND lastName = ?";
-                if (DOB != null) sql += " AND DOB = ?";
-                if (!gender.isEmpty()) sql += " AND gender = ?";
-                if (!phoneNumber.isEmpty()) sql += " AND phoneNumber = ?";
-                if (!street1.isEmpty()) sql += " AND street1 = ?";
-                if (!street2.isEmpty()) sql += " AND street2 = ?";
-                if (!city.isEmpty()) sql += " AND city = ?";
-                if (!state.isEmpty()) sql += " AND state = ?";
-                if (!ZIP.isEmpty()) sql += " AND ZIP = ?";
-                if (!country.isEmpty()) sql += " AND country = ?";
+                if (!firstName.isEmpty()) sql += " AND firstName LIKE ?";
+                if (!lastName.isEmpty()) sql += " AND lastName LIKE ?";
+                if (DOB != null) sql += " AND DOB LIKE ?";
+                if (!gender.isEmpty()) sql += " AND gender LIKE ?";
+                if (!phoneNumber.isEmpty()) sql += " AND phoneNumber LIKE ?";
+                if (!street1.isEmpty()) sql += " AND street1 LIKE ?";
+                if (!street2.isEmpty()) sql += " AND street2 LIKE ?";
+                if (!city.isEmpty()) sql += " AND city LIKE ?";
+                if (!state.isEmpty()) sql += " AND state LIKE ?";
+                if (!ZIP.isEmpty()) sql += " AND ZIP LIKE ?";
+                if (!country.isEmpty()) sql += " AND country LIKE ?";
 
                 PreparedStatement ps = conn.prepareStatement(sql);
                 int index = 1;
 
-                if (!firstName.isEmpty()) ps.setString(index++, firstName);
-                if (!lastName.isEmpty()) ps.setString(index++, lastName);
-                if (DOB != null) ps.setObject(index++, DOB);
-                if (!gender.isEmpty()) ps.setString(index++, gender);
-                if (!phoneNumber.isEmpty()) ps.setString(index++, phoneNumber);
-                if (!street1.isEmpty()) ps.setString(index++, street1);
-                if (!street2.isEmpty()) ps.setString(index++, street2);
-                if (!city.isEmpty()) ps.setString(index++, city);
-                if (!state.isEmpty()) ps.setString(index++, state);
-                if (!ZIP.isEmpty()) ps.setString(index++, ZIP);
-                if (!country.isEmpty()) ps.setString(index++, country);
+                if (!firstName.isEmpty()) ps.setString(index++, firstName + "%");
+                if (!lastName.isEmpty()) ps.setString(index++, lastName + "%");
+                if (DOB != null) ps.setObject(index++, DOB + "%");
+                if (!gender.isEmpty()) ps.setString(index++, gender + "%");
+                if (!phoneNumber.isEmpty()) ps.setString(index++, phoneNumber + "%");
+                if (!street1.isEmpty()) ps.setString(index++, street1 + "%");
+                if (!street2.isEmpty()) ps.setString(index++, street2 + "%");
+                if (!city.isEmpty()) ps.setString(index++, city + "%");
+                if (!state.isEmpty()) ps.setString(index++, state + "%");
+                if (!ZIP.isEmpty()) ps.setString(index++, ZIP + "%");
+                if (!country.isEmpty()) ps.setString(index++, country + "%");
 
                 ResultSet rs = ps.executeQuery();
 
@@ -92,6 +92,16 @@ import java.sql.*;
 
             return results;
         }
+
+        public static ArrayList<Patient> searchPatient(String input) {
+            String[] parts = input.split(",");
+            String lastName = parts.length > 0 ? parts[0].trim() : "";
+            String firstName = parts.length > 1 ? parts[1].trim() : "";
+
+            // Call the full dynamic search
+            return searchPatient(firstName, lastName, null, "", "", "", "", "", "", "", "");
+        }
+
 
 
         public void addPrescriber(Prescriber p) {
@@ -255,18 +265,16 @@ import java.sql.*;
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
                 String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
                 PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1,username);
-                ps.setString(2,password);
+                ps.setString(1, username);
+                ps.setString(2, password);
                 ResultSet rs = ps.executeQuery();
                 return rs.next();
             } catch (RuntimeException | SQLException e) {
                 return false;
             }
-
-
-
-
         }
+
+
     }
 
 

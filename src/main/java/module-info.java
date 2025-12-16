@@ -16,6 +16,7 @@ module com.example.javafx {
     requires javafx.base;
 
 
+    opens models to javafx.base;
     opens com.example.javafx to javafx.fxml;
     exports com.example.javafx;
 }
