@@ -3,6 +3,7 @@ package models;
 import java.time.LocalDate;
 
 public class Patient {
+    private String patientID;
     private String firstName;
     private String lastName;
     private LocalDate DOB;
@@ -40,6 +41,32 @@ public class Patient {
 
     }
 
+    public Patient(
+            String patientID,
+            String firstName,
+            String lastName,
+            LocalDate dob,
+            String gender,
+            String phoneNumber,
+            String street1,
+            String street2,
+            String city,
+            String state,
+            String zip,
+            String country,
+            String allergies
+    ) {
+        this(firstName, lastName, dob, gender, phoneNumber, street1, street2, city, state, zip, country, allergies);
+        this.patientID = patientID;
+    }
+
+    public String getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
 
     public String getFirstName() {
         return firstName;

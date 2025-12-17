@@ -52,7 +52,7 @@
                         <Font name="Arial Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Patient" />
+                  <Button fx:id="patientBtn" alignment="CENTER" mnemonicParsing="false" onAction="#initializePatient" text="Patient" />
                   <Button mnemonicParsing="false" text="Prescriber" />
                </children>
                <HBox.margin>
@@ -79,7 +79,7 @@
             </HBox>
             <VBox prefHeight="290.0" prefWidth="1148.0">
                <children>
-                  <TableView fx:id="resultsTable" prefHeight="290.0" prefWidth="1131.0">
+                  <TableView fx:id="resultsTable" prefHeight="290.0" prefWidth="1131.0" visible="false">
                     <columns>
                       <TableColumn fx:id="firstNameCol" prefWidth="75.0" text="First Name" />
                       <TableColumn fx:id="lastNameCol" prefWidth="75.0" text="Last Name" />

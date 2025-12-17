@@ -1,11 +1,9 @@
 package com.example.javafx;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -87,6 +85,21 @@ public class MenuController implements Initializable {
                 new PropertyValueFactory<>("allergies")
         );
         resultsTable.getItems().clear();
+
+        resultsTable.setRowFactory(tv -> {
+            TableRow<Patient> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty()) {
+                    Patient patient = row.getItem();
+                    System.out.println("Clicked patient: " + patient.getPatientID());
+                }
+            });
+
+            return row;
+        });
+
+
     }
 
 
@@ -159,9 +172,11 @@ public class MenuController implements Initializable {
     @FXML private TableColumn<Patient, String> countryCol;
     @FXML private TableColumn<Patient, String> allergiesCol;
 
+    @FXML
+    private void initializePatient(ActionEvent actionEvent) {
+        resultsTable.setVisible(!resultsTable.isVisible());
 
-
-
+    }
 
 
 

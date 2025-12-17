@@ -70,6 +70,7 @@ import java.sql.*;
                     LocalDate dobValue = dobColumn != null ? dobColumn.toLocalDate() : null;
 
                     Patient patient = new Patient(
+                            rs.getString("patientID"),
                             rs.getString("firstName"),
                             rs.getString("lastName"),
                             dobValue,
