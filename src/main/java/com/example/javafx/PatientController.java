@@ -2,15 +2,12 @@ package com.example.javafx;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import models.DatabaseManager;
 import models.Patient;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -115,7 +112,6 @@ public class PatientController {
                 firstNameField.getText(),
                 lastNameField.getText(),
                 dob,
-                genderField.getText(),
                 phoneNumberField.getText(),
                 street1Field.getText(),
                 street2Field.getText(),
@@ -145,8 +141,72 @@ public class PatientController {
         countryField.setText(p.getCountry());
         allergiesField.setText(p.getAllergies());
     }
+    @FXML
+    private Button cancelBtn;
+
+    @FXML
+    private void handleCancel(ActionEvent actionEvent) {
+        Stage stage = (Stage) cancelBtn.getScene().getWindow();
+        stage.close();
+    }
+    @FXML
+    private TableView<Patient> resultsTable;
+    @FXML private TableColumn<Patient, String> firstNameCol;
+    @FXML private TableColumn<Patient, String> lastNameCol;
+    @FXML private TableColumn<Patient, LocalDate> dobCol;
+    @FXML private TableColumn<Patient, String> phoneNumberCol;
+    @FXML private TableColumn<Patient, String> street1Col;
+    @FXML private TableColumn<Patient, String> street2Col;
+    @FXML private TableColumn<Patient, String> cityCol;
+    @FXML private TableColumn<Patient, String> stateCol;
+    @FXML private TableColumn<Patient, String> zipCol;
+    @FXML private TableColumn<Patient, String> countryCol;
+    @FXML
+    private void initialize() {
+
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("firstName")
+        );
+
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("lastName")
+        );
+
+        dobCol.setCellValueFactory(
+                new PropertyValueFactory<>("dob") // lowercase property
+        );
+
+        phoneNumberCol.setCellValueFactory(
+                new PropertyValueFactory<>("phoneNumber")
+        );
+
+        street1Col.setCellValueFactory(
+                new PropertyValueFactory<>("street1")
+        );
+
+        street2Col.setCellValueFactory(
+                new PropertyValueFactory<>("street2")
+        );
+
+        cityCol.setCellValueFactory(
+                new PropertyValueFactory<>("city")
+        );
+
+        stateCol.setCellValueFactory(
+                new PropertyValueFactory<>("state")
+        );
+
+        zipCol.setCellValueFactory(
+                new PropertyValueFactory<>("zip") // lowercase property
+        );
+
+        countryCol.setCellValueFactory(
+                new PropertyValueFactory<>("country")
+        );
 
 
+        resultsTable.getItems().clear();
+    }
 
 
 }

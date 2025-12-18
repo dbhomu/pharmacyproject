@@ -70,7 +70,7 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="searchBar" onAction="#search">
+                  <TextField fx:id="searchBar" onAction="#search" visible="false">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>

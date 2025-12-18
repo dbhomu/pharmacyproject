@@ -2,16 +2,22 @@ package com.example.javafx;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import models.DatabaseManager;
 import models.Patient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -81,9 +87,6 @@ public class MenuController implements Initializable {
                 new PropertyValueFactory<>("country")
         );
 
-        allergiesCol.setCellValueFactory(
-                new PropertyValueFactory<>("allergies")
-        );
         resultsTable.getItems().clear();
 
         resultsTable.setRowFactory(tv -> {
@@ -144,7 +147,7 @@ public class MenuController implements Initializable {
 
 // Call your DatabaseManager method with parsed fields
         ArrayList<Patient> results = DatabaseManager.searchPatient(
-                firstName, lastName, dob, "", phone, "", "", "", "", "", ""
+                firstName, lastName, dob, "", phone, "", "", "", "", ""
         );
 
 // Populate the TableView
@@ -154,8 +157,31 @@ public class MenuController implements Initializable {
 
     @FXML
     private void search() {
-        // Trigger search when user presses Enter
-        searchBar.setOnAction(event -> handleSearchInput(searchBar.getText()));
+
+        handleSearchInput(searchBar.getText());
+        openRefineParameters();
+    }
+
+    @FXML
+    private void openRefineParameters() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/javafx/refine parameters.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Refine Patient Search");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // blocks main window
+            stage.setResizable(false);
+
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -170,12 +196,11 @@ public class MenuController implements Initializable {
     @FXML private TableColumn<Patient, String> stateCol;
     @FXML private TableColumn<Patient, String> zipCol;
     @FXML private TableColumn<Patient, String> countryCol;
-    @FXML private TableColumn<Patient, String> allergiesCol;
 
     @FXML
     private void initializePatient(ActionEvent actionEvent) {
         resultsTable.setVisible(!resultsTable.isVisible());
-
+        searchBar.setVisible(!searchBar.isVisible());
     }
 
 

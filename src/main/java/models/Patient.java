@@ -60,6 +60,16 @@ public class Patient {
         this.patientID = patientID;
     }
 
+    public Patient(String patientID, String firstName, String lastName, LocalDate dob,
+                   String phoneNumber, String street1, String street2,
+                   String city, String state, String zip, String country) {
+
+        this(patientID, firstName, lastName, dob, null,  // gender is null
+                phoneNumber, street1, street2, city, state, zip, country, null);
+    }
+
+
+
     public String getPatientID() {
         return patientID;
     }
