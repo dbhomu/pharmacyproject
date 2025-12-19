@@ -60,13 +60,16 @@ public class Patient {
         this.patientID = patientID;
     }
 
-    public Patient(String patientID, String firstName, String lastName, LocalDate dob,
+    // Constructor for search (no gender, no allergies)
+    public Patient(String patientID, String firstName, String lastName, LocalDate dobValue,
                    String phoneNumber, String street1, String street2,
                    String city, String state, String zip, String country) {
-
-        this(patientID, firstName, lastName, dob, null,  // gender is null
-                phoneNumber, street1, street2, city, state, zip, country, null);
+        this(patientID, firstName, lastName, dobValue,
+                null, // gender
+                phoneNumber, street1, street2, city, state, zip, country,
+                null); // allergies
     }
+
 
 
 
@@ -201,9 +204,5 @@ public class Patient {
 
     }
 
-    public void printInfo() {
-        System.out.println(getFirstName() + " | " + getLastName() + " | " + getDOB() + " | " + getGender() + " | " + getPhoneNumber() + " | \n"
-        + getStreet1() + " | " + getStreet2() + " | " + getCity() + " | " + getState() + " | " + getZIP() + " | " + getCountry() + " | " + getAllergies());
-    }
 }
 

@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.DatabaseManager;
 import models.Patient;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,8 +35,10 @@ public class MenuController implements Initializable {
     @FXML
     private Circle profileCircle; // linked in FXML
 
-
-
+    @FXML private TextField lastNameField;
+    @FXML private TextField firstNameField;
+    @FXML private TextField dobField;
+    @FXML private TextField phoneNumberField;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Use 'file:' and double backslashes OR single forward slashes
@@ -115,11 +118,11 @@ public class MenuController implements Initializable {
     @FXML
     private TextField searchBar;
 
-    private void handleSearchInput(String input) {
-        String[] parts = input.split(",");
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].trim();
-        }
+    @FXML
+    private void search() {
+        // Parse input
+        String[] parts = searchBar.getText().split(",");
+        for (int i = 0; i < parts.length; i++) parts[i] = parts[i].trim();
 
         String firstName = "";
         String lastName = "";
@@ -127,62 +130,39 @@ public class MenuController implements Initializable {
         String phone = "";
 
         for (String part : parts) {
-            // Check if part is a date (MM/DD/YYYY)
             if (part.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
                 dob = LocalDate.parse(part, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-            }
-            // Check if part is only numbers → phone number
-            else if (part.matches("\\d+")) {
+            } else if (part.matches("\\d+")) {
                 phone = part;
-            }
-            // Otherwise treat as a name
-            else {
-                if (lastName.isEmpty()) {
-                    lastName = part;
-                } else if (firstName.isEmpty()) {
-                    firstName = part;
-                }
+            } else {
+                if (lastName.isEmpty()) lastName = part;
+                else if (firstName.isEmpty()) firstName = part;
             }
         }
-
-// Call your DatabaseManager method with parsed fields
-        ArrayList<Patient> results = DatabaseManager.searchPatient(
-                firstName, lastName, dob, "", phone, "", "", "", "", ""
-        );
-
-// Populate the TableView
-        resultsTable.getItems().setAll(results);
-
-    }
-
-    @FXML
-    private void search() {
-
-        handleSearchInput(searchBar.getText());
-        openRefineParameters();
-    }
-
-    @FXML
-    private void openRefineParameters() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/javafx/refine parameters.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javafx/refine parameters.fxml"));
+            Parent root = loader.load(); // load FXML first
+            PatientController controller = loader.getController();
 
-            Parent root = loader.load();
-
+            // populate fields
+            controller.setPatientSearchData(firstName, lastName, dob, phone);
+            controller.searchPatientButton(null);
             Stage stage = new Stage();
             stage.setTitle("Refine Patient Search");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL); // blocks main window
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
-
             stage.showAndWait();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
 
     @FXML
     private TableView<Patient> resultsTable;

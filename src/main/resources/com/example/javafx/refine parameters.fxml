@@ -65,8 +65,8 @@
                 </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#searchPatientButton" text="Search" />
-                  <Button mnemonicParsing="false" onAction="#addPatientButton" text="Add" />
+                  <Button fx:id="searchPatientBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#searchPatientButton" text="Search" />
+                  <Button mnemonicParsing="false" onAction="#openAddPatient" text="Add" />
                   <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
                </children>
             </HBox>
