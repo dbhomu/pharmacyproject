@@ -52,11 +52,11 @@ public class Patient {
             String street2,
             String city,
             String state,
-            String zip,
+            String ZIP,
             String country,
             String allergies
     ) {
-        this(firstName, lastName, dob, gender, phoneNumber, street1, street2, city, state, zip, country, allergies);
+        this(firstName, lastName, dob, gender, phoneNumber, street1, street2, city, state, ZIP, country, allergies);
         this.patientID = patientID;
     }
 
@@ -80,7 +80,7 @@ public class Patient {
         this.street2 = street2;
         this.city = city;
         this.state = state;
-        this.ZIP = ZIP;
+        setZIP(ZIP);
         this.country = country;
     }
 

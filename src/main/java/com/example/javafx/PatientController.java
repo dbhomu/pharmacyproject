@@ -80,7 +80,7 @@ public class PatientController {
         );
 
         zipCol.setCellValueFactory(
-                new PropertyValueFactory<>("zip") // lowercase property
+                new PropertyValueFactory<>("ZIP")
         );
 
         countryCol.setCellValueFactory(
@@ -91,19 +91,17 @@ public class PatientController {
         resultsTable.getItems().clear();
 
 
-        //RETURNS PATIENT ID UPON CLICK
-        resultsTable.setRowFactory(tv-> {
+        resultsTable.setRowFactory(tv -> {
             TableRow<Patient> row = new TableRow<>();
-
             row.setOnMouseClicked(event -> {
-                if (!row.isEmpty()) {
+                if (!row.isEmpty() && event.getClickCount() == 2) { // optional: double-click to open
                     Patient patient = row.getItem();
-                    System.out.println("Clicked patient: " + patient.getPatientID());
+                    openPatientProfile(patient);
                 }
             });
-
             return row;
         });
+
 
         refinePane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -273,6 +271,26 @@ public class PatientController {
         lastNameField.setText(lastName);
         dobField.setText(dob != null ? dob.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "");
         phoneNumberField.setText(phone);
+    }
+    private void openPatientProfile(Patient patient) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javafx/patient profile.fxml"));
+            Parent root = loader.load();
+
+            // Pass the selected patient to the profile controller
+            PatientProfileController controller = loader.getController();
+            controller.setPatient(patient);
+
+            // Open in a new window
+            Stage stage = new Stage();
+            stage.setTitle("Patient Profile: " + patient.getFirstName() + " " + patient.getLastName());
+            stage.setScene(new Scene(root));
+            stage.setResizable(true);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

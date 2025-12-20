@@ -29,6 +29,10 @@ public class Prescriber {
         setCountry(country);
     }
 
+    public Prescriber() {
+
+    }
+
     // Main combined check
     public static boolean isValidNPI(String npi) {
         //1043171796 is a test case

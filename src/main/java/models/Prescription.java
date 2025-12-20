@@ -1,11 +1,13 @@
 package models;
 
 public class Prescription {
+
     private Patient patient;
     private Prescriber prescriber;
     private Drug drug;
+    private String rxNumber;
     private String SIG;
-    private int drugRefills;
+    private int refills;
     private String earliestFillDate;
     private String prescriptionExpirationDate;
     private String prescribedQuantity;
@@ -14,18 +16,23 @@ public class Prescription {
     private String prescriptionType;
 
 
-    public Prescription(Patient patient, Prescriber prescriber, Drug drug, String SIG, int refills, String earliestFillDate, String prescriptionExpirationDate, String prescribedQuantity, String writtenDate, String diagnosisCode, String prescriptionType) {
+    public Prescription(Patient patient, Prescriber prescriber, Drug drug, String rxNumber, String SIG, int refills, String earliestFillDate, String prescriptionExpirationDate, String prescribedQuantity, String writtenDate, String diagnosisCode, String prescriptionType) {
+        this.rxNumber = rxNumber;
         this.patient = patient;
         this.prescriber = prescriber;
         this.drug = drug;
         this.SIG = SIG;
-        this.drugRefills = drugRefills;
+        this.refills = refills;
         this.earliestFillDate = earliestFillDate;
         this.prescriptionExpirationDate = prescriptionExpirationDate;
         this.prescribedQuantity = prescribedQuantity;
         this.writtenDate = writtenDate;
         this.diagnosisCode = diagnosisCode;
         this.prescriptionType = prescriptionType;
+    }
+
+    public Prescription() {
+
     }
 
     public Patient getPatient() {
@@ -52,6 +59,14 @@ public class Prescription {
         this.drug = drug;
     }
 
+    public String getRxNumber() {
+        return rxNumber;
+    }
+
+    public void setRxNumber(String rxNumber) {
+        this.rxNumber = rxNumber;
+    }
+
     public String getSIG() {
         return SIG;
     }
@@ -61,11 +76,11 @@ public class Prescription {
     }
 
     public int getRefills() {
-        return drugRefills;
+        return refills;
     }
 
     public void setRefills(int refills) {
-
+        this.refills = refills;
     }
 
     public String getEarliestFillDate() {

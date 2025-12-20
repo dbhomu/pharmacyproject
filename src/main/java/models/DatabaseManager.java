@@ -269,6 +269,50 @@ import java.sql.*;
             }
         }
 
+        public ArrayList<Prescription> getPrescriptionsForPatient(String patientID) {
+            ArrayList<Prescription> prescriptions = new ArrayList<>();
+            try {
+                Connection conn = DriverManager.getConnection(URL, USER, PASS);
+                String sql = "SELECT p.rxNumber, p.sig, p.refills, d.drugName, d.drugNDC, pr.firstName, pr.lastName " +
+                        "FROM prescriptions p " +
+                        "JOIN drugs d ON p.drugID = d.drugID " +
+                        "JOIN prescribers pr ON p.prescriberID = pr.prescriberID " +
+                        "WHERE p.patientID = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, patientID);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    // Build Drug object
+                    Drug drug = new Drug();
+                    drug.setDrugName(rs.getString("drugName"));
+                    drug.setDrugNDC(rs.getString("drugNDC"));
+                    // ... populate other drug fields if needed
+
+                    // Build Prescriber object
+                    Prescriber prescriber = new Prescriber();
+                    prescriber.setFirstName(rs.getString("firstName"));
+                    prescriber.setLastName(rs.getString("lastName"));
+                    // ... populate other prescriber fields if needed
+
+                    // Build Prescription object
+                    Prescription prescription = new Prescription();
+                    prescription.setRxNumber(rs.getString("rxNumber"));
+                    prescription.setSIG(rs.getString("SIG"));
+                    prescription.setRefills(rs.getInt("refills"));
+                    prescription.setDrug(drug);
+                    prescription.setPrescriber(prescriber);
+
+                    prescriptions.add(prescription);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return prescriptions;
+        }
+
+
 
     }
 

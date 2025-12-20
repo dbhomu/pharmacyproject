@@ -26,17 +26,19 @@ public class Drug {
         this.location = location;
     }
 
+    public Drug() {
+
+    }
+
     public String getDrugName() {
         return drugName;
     }
 
     public void setDrugName(String drugName) {
-        if(!drugName.matches("[A-Za-z ]+")) {
-            throw new RuntimeException("Invalid input!");
-
+        if (drugName == null || drugName.isBlank()) {
+            throw new RuntimeException("Drug name cannot be blank!");
         }
         this.drugName = drugName;
-
     }
 
     public String getDrugStrength() {
@@ -52,14 +54,12 @@ public class Drug {
     }
 
     public void setDrugNDC(String drugNDC) {
-        if(drugNDC.length() != 11) {
-            throw new RuntimeException("11 digits of input required for NDC");
-        }
-        if(drugNDC.isBlank()) {
-            throw new RuntimeException("NDC must have a value");
+        if (drugNDC == null || drugNDC.length() != 11) {
+            throw new RuntimeException("11-digit NDC required");
         }
         this.drugNDC = drugNDC;
     }
+
 
     public String getDrugLOT() {
         return drugLOT;
@@ -98,10 +98,12 @@ public class Drug {
     }
 
     public void setControl(int control) {
-        if(control < 2 || control > 6) {
-            throw new RuntimeException("Drug Schedule value must be in between 2 and 6");
+        if (control != 0 && (control < 2 || control > 6)) {
+            throw new RuntimeException("Control schedule must be 2-6 for prescription drugs, 0 for OTC/non-scheduled");
         }
+        this.control = control;
     }
+
 
     public int getDrugPackageSize() {
         return drugPackageSize;
