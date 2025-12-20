@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.PatientController">
+<BorderPane fx:id="refinePane" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafx.PatientController">
 
     <top>
         <VBox prefHeight="245.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
@@ -66,7 +66,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Button fx:id="searchPatientBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#searchPatientButton" text="Search" />
-                  <Button mnemonicParsing="false" onAction="#openAddPatient" text="Add" />
+                  <Button fx:id="addPatientBtn" mnemonicParsing="false" onAction="#addPatientButton" text="Add" />
                   <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
                </children>
             </HBox>
@@ -77,8 +77,8 @@
     <center>
         <TableView fx:id="resultsTable">
             <columns>
-                <TableColumn fx:id="firstNameCol" text="First Name" />
                 <TableColumn fx:id="lastNameCol" text="Last Name" />
+                <TableColumn fx:id="firstNameCol" text="First Name" />
                 <TableColumn fx:id="dobCol" text="DOB" />
                 <TableColumn fx:id="phoneNumberCol" text="Phone Number" />
                 <TableColumn fx:id="street1Col" text="Street 1" />

@@ -11,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import models.DatabaseManager;
 import models.Patient;
@@ -86,8 +89,34 @@ public class PatientController {
 
 
         resultsTable.getItems().clear();
+
+
+        //RETURNS PATIENT ID UPON CLICK
+        resultsTable.setRowFactory(tv-> {
+            TableRow<Patient> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty()) {
+                    Patient patient = row.getItem();
+                    System.out.println("Clicked patient: " + patient.getPatientID());
+                }
+            });
+
+            return row;
+        });
+
+        refinePane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                searchPatientBtn.fire(); // automatically triggers the search
+                event.consume(); // prevent ENTER from doing other things (like inserting a newline)
+            }
+        });
+
+
     }
 
+    @FXML private BorderPane refinePane;
+    @FXML private Button addPatientBtn;
     @FXML
     private void addPatientButton(ActionEvent event) {
         // Validate DOB
@@ -118,8 +147,7 @@ public class PatientController {
                     cityField.getText(),
                     stateField.getText(),
                     zipField.getText(),
-                    countryField.getText(),
-                    allergiesField.getText()
+                    countryField.getText()
             );
 
             db.addPatient(patient);
@@ -147,7 +175,6 @@ public class PatientController {
         stateField.clear();
         zipField.clear();
         countryField.clear();
-        allergiesField.clear();
     }
 
     @FXML
@@ -193,11 +220,11 @@ public class PatientController {
 
 
 
-        // Call your DatabaseManager method with parsed f
 
-// Populate the TableView
 
     }
+
+
     @FXML
     private Button cancelBtn;
 
@@ -247,5 +274,8 @@ public class PatientController {
         dobField.setText(dob != null ? dob.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : "");
         phoneNumberField.setText(phone);
     }
+
+
+
 
 }

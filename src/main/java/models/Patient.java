@@ -70,8 +70,19 @@ public class Patient {
                 null); // allergies
     }
 
-
-
+    public Patient(String firstName, String lastName, LocalDate DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.DOB = DOB;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.street1 = street1;
+        this.street2 = street2;
+        this.city = city;
+        this.state = state;
+        this.ZIP = ZIP;
+        this.country = country;
+    }
 
     public String getPatientID() {
         return patientID;
