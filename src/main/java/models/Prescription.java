@@ -1,5 +1,7 @@
 package models;
 
+import java.time.LocalDate;
+
 public class Prescription {
 
     private Patient patient;
@@ -7,22 +9,25 @@ public class Prescription {
     private Drug drug;
     private String rxNumber;
     private String SIG;
-    private int refills;
+    private String refills;
+    private LocalDate fillDate;
     private String earliestFillDate;
     private String prescriptionExpirationDate;
-    private String prescribedQuantity;
+    private int prescribedQuantity;
     private String writtenDate;
     private String diagnosisCode;
     private String prescriptionType;
+    private boolean isActive;
 
 
-    public Prescription(Patient patient, Prescriber prescriber, Drug drug, String rxNumber, String SIG, int refills, String earliestFillDate, String prescriptionExpirationDate, String prescribedQuantity, String writtenDate, String diagnosisCode, String prescriptionType) {
+    public Prescription(Patient patient, Prescriber prescriber, Drug drug, String rxNumber, String SIG, String refills, LocalDate fillDate, String earliestFillDate, String prescriptionExpirationDate, int prescribedQuantity, String writtenDate, String diagnosisCode, String prescriptionType) {
         this.rxNumber = rxNumber;
         this.patient = patient;
         this.prescriber = prescriber;
         this.drug = drug;
         this.SIG = SIG;
         this.refills = refills;
+        this.fillDate = fillDate;
         this.earliestFillDate = earliestFillDate;
         this.prescriptionExpirationDate = prescriptionExpirationDate;
         this.prescribedQuantity = prescribedQuantity;
@@ -75,12 +80,20 @@ public class Prescription {
         this.SIG = SIG;
     }
 
-    public int getRefills() {
+    public String getRefills() {
         return refills;
     }
 
-    public void setRefills(int refills) {
+    public void setRefills(String refills) {
         this.refills = refills;
+    }
+
+    public LocalDate getFillDate() {
+        return fillDate;
+    }
+
+    public void setFillDate(LocalDate fillDate) {
+        this.fillDate = fillDate;
     }
 
     public String getEarliestFillDate() {
@@ -99,11 +112,11 @@ public class Prescription {
         this.prescriptionExpirationDate = prescriptionExpirationDate;
     }
 
-    public String getPrescribedQuantity() {
+    public int getPrescribedQuantity() {
         return prescribedQuantity;
     }
 
-    public void setPrescribedQuantity(String prescribedQuantity) {
+    public void setPrescribedQuantity(int prescribedQuantity) {
         this.prescribedQuantity = prescribedQuantity;
     }
 
@@ -130,4 +143,14 @@ public class Prescription {
     public void setPrescriptionType(String prescriptionType) {
         this.prescriptionType = prescriptionType;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+
 }

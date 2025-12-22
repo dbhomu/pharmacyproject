@@ -269,43 +269,51 @@ import java.sql.*;
             }
         }
 
-        public ArrayList<Prescription> getPrescriptionsForPatient(String patientID) {
+        public static ArrayList<Prescription> getPrescriptionsForPatient(String patientID) {
             ArrayList<Prescription> prescriptions = new ArrayList<>();
-            try {
-                Connection conn = DriverManager.getConnection(URL, USER, PASS);
-                String sql = "SELECT p.rxNumber, p.sig, p.refills, d.drugName, d.drugNDC, pr.firstName, pr.lastName " +
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
+                // 1. ADD THE MISSING COLUMNS HERE
+                String sql = "SELECT p.*, d.drugName, d.drugNDC, pr.firstName, pr.lastName " +
                         "FROM prescriptions p " +
                         "JOIN drugs d ON p.drugID = d.drugID " +
                         "JOIN prescribers pr ON p.prescriberID = pr.prescriberID " +
                         "WHERE p.patientID = ?";
+
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, patientID);
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
-                    // Build Drug object
+                    // Build Drug
                     Drug drug = new Drug();
                     drug.setDrugName(rs.getString("drugName"));
                     drug.setDrugNDC(rs.getString("drugNDC"));
-                    // ... populate other drug fields if needed
 
-                    // Build Prescriber object
+                    // Build Prescriber
                     Prescriber prescriber = new Prescriber();
                     prescriber.setFirstName(rs.getString("firstName"));
                     prescriber.setLastName(rs.getString("lastName"));
-                    // ... populate other prescriber fields if needed
 
-                    // Build Prescription object
+                    // Build Prescription
                     Prescription prescription = new Prescription();
                     prescription.setRxNumber(rs.getString("rxNumber"));
                     prescription.setSIG(rs.getString("SIG"));
-                    prescription.setRefills(rs.getInt("refills"));
+                    prescription.setRefills(rs.getString("refills"));
+
+                    // 2. NOW YOU CAN GRAB THE QUANTITY (The "20")
+                    prescription.setPrescribedQuantity(rs.getInt("prescribedQuantity"));
+
+                    // Get the SQL date, then convert it to the modern LocalDate
+                    Date sqlDate = rs.getDate("fillDate");
+                    if (sqlDate != null) {
+                        prescription.setFillDate(sqlDate.toLocalDate());
+                    }
+
                     prescription.setDrug(drug);
                     prescription.setPrescriber(prescriber);
 
                     prescriptions.add(prescription);
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
