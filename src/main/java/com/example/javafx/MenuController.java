@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -48,7 +49,7 @@ public class MenuController implements Initializable {
     @FXML private TableColumn<Prescription, String> autoFillCol;
     @FXML private TableColumn<Prescription, String> sigCol;
     @FXML private TableColumn<Prescription, String> statusCol;
-
+    private Patient currentPatient;
     // ----------- Initialization -----------
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,10 +142,13 @@ public class MenuController implements Initializable {
         controller.setSearchFields(searchText);
         controller.populateResults(results);
 
+
         // Listen for patient selection
         controller.setPatientSelectedListener(selectedPatient -> {
             // Pull prescriptions for the patient and populate table
             ArrayList<Prescription> prescriptions = DatabaseManager.getPrescriptionsForPatient(selectedPatient.getPatientID());
+            prescriptionsTable.getItems().setAll(prescriptions);
+            currentPatient = selectedPatient;
             prescriptionsTable.getItems().setAll(prescriptions);
         });
 
@@ -155,8 +159,41 @@ public class MenuController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.showAndWait();
+        searchBar.setText(currentPatient.getFirstName() + " " + currentPatient.getLastName());
     }
 
+
+
+    @FXML private Button modifyPatientBtn;
+
+    @FXML
+    private void openModifyPatientPopup(ActionEvent event) throws IOException {
+        // 1. Load the FXML
+
+        if(currentPatient == null) {
+            showAlert("Please select a patient first.");
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/javafx/modify patient.fxml"));
+        Parent root = loader.load();
+        ModifyPatientController controller = loader.getController();
+
+        //GETTING THE PATIENT ID
+        controller.setPatient(currentPatient);
+        // 2. Create a NEW Stage (Window)
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Modify Patient Details");
+
+        // 3. Set the scene on the NEW stage
+        popupStage.setScene(new Scene(root));
+
+        // 4. Set Modality (Crucial for Popups)
+        // This blocks the user from clicking the main window until the popup is closed
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+
+        // 5. Show it
+        popupStage.showAndWait();
+    }
 
 
 

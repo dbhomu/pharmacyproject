@@ -60,24 +60,29 @@ import java.sql.*;
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
+                    // 1. Create a blank patient object
+                    Patient patient = new Patient();
 
-                    // NULL-safe DOB
+                    // 2. Set the data one by one (No more order issues!)
+                    patient.setPatientID(rs.getString("patientID"));
+                    patient.setFirstName(rs.getString("firstName"));
+                    patient.setLastName(rs.getString("lastName"));
+
+                    // Handle the Date safely
                     Date dobColumn = rs.getDate("DOB");
-                    LocalDate dobValue = dobColumn != null ? dobColumn.toLocalDate() : null;
+                    if (dobColumn != null) {
+                        patient.setDOB(dobColumn.toLocalDate());
+                    }
 
-                    Patient patient = new Patient(
-                            rs.getString("patientID"),
-                            rs.getString("firstName"),
-                            rs.getString("lastName"),
-                            dobValue,
-                            rs.getString("phoneNumber"),
-                            rs.getString("street1"),
-                            rs.getString("street2"),
-                            rs.getString("city"),
-                            rs.getString("state"),
-                            rs.getString("ZIP"),
-                            rs.getString("country")
-                    );
+                    patient.setGender(rs.getString("gender"));
+
+                    patient.setPhoneNumber(rs.getString("phoneNumber"));
+                    patient.setStreet1(rs.getString("street1"));
+                    patient.setStreet2(rs.getString("street2"));
+                    patient.setCity(rs.getString("city"));
+                    patient.setState(rs.getString("state"));
+                    patient.setZIP(rs.getString("ZIP"));
+                    patient.setCountry(rs.getString("country"));
 
                     results.add(patient);
                 }
@@ -160,7 +165,7 @@ import java.sql.*;
             }
         }
 
-        public void modifyPatient(int patientID, Patient p) {
+        public void updatePatient(String patientID, Patient p) {
             try {
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
                 String sql = "UPDATE patients SET firstName = ?, lastName = ?, DOB = ?, gender = ?, phoneNumber = ?, " +
@@ -178,7 +183,7 @@ import java.sql.*;
                 ps.setString(9, p.getState());
                 ps.setString(10, p.getZIP());
                 ps.setString(11, p.getCountry());
-                ps.setInt(12, patientID);
+                ps.setString(12, patientID);
 
                 ps.executeUpdate();
                 ps.close();

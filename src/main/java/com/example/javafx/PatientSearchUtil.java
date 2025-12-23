@@ -31,6 +31,6 @@ public class PatientSearchUtil {
             }
         }
 
-        return db.searchPatient(firstName, lastName, DOB, phoneNumber, "", "", "", "", "", "");
+        return db.searchPatient(firstName, lastName, DOB, phoneNumber,"","","","","","");
     }
 }
