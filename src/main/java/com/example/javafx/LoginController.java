@@ -107,9 +107,13 @@ public class LoginController {
             stage.setScene(new Scene(root));
             stage.setResizable(true);
             stage.show();
+
+
         } else {
             loginResult.setText("Invalid Username or Password!");
+
         }
+
     }
 
 

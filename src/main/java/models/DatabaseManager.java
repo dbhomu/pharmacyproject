@@ -260,13 +260,15 @@ import java.sql.*;
         }
 
 
+
+
         public static boolean validateLogin(String username, String password) {
             try {
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
                 String sql = "SELECT * FROM users WHERE BINARY username = ? AND BINARY password = ?";
                 PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, username);
-                ps.setString(2, password);
+                ps.setString(1, username.trim());
+                ps.setString(2, password.trim());
                 ResultSet rs = ps.executeQuery();
                 return rs.next();
             } catch (RuntimeException | SQLException e) {

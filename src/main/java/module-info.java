@@ -14,9 +14,13 @@ module com.example.javafx {
     requires javafx.graphics;
     requires java.desktop;
     requires javafx.base;
+    requires com.fasterxml.jackson.databind;
+    requires jdk.httpserver;
+    requires com.google.gson;
 
-
-    opens models to javafx.base;
     opens com.example.javafx to javafx.fxml;
+    opens models to com.google.gson;
+
     exports com.example.javafx;
+    exports models;
 }

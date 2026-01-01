@@ -30,6 +30,24 @@ public class Drug {
 
     }
 
+    public Drug(String drugName) {
+        setDrugName(drugName);
+    }
+
+    public Drug(String drugName, String drugStrength) {
+        setDrugName(drugName);
+        this.drugStrength = drugStrength;
+        this.drugNDC = "12345678901"; // dummy valid NDC for testing
+        this.drugLOT = "LOT123";
+        this.drugForm = "Tablet";
+        this.drugRoute = "Oral";
+        this.drugManufacturer = "TestPharma";
+        this.control = 0;
+        this.drugPackageSize = 30;
+        this.drugQOH = 100;
+        this.location = "Main Shelf";
+    }
+
     public String getDrugName() {
         return drugName;
     }

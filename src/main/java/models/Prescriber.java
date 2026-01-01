@@ -33,6 +33,10 @@ public class Prescriber {
 
     }
 
+    public Prescriber(String firstName, String lastName) {
+        this.firstName = firstName;
+    }
+
     // Main combined check
     public static boolean isValidNPI(String npi) {
         //1043171796 is a test case

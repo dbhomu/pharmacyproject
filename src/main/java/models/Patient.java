@@ -214,6 +214,10 @@ public class Patient {
     public Patient () {
 
     }
+    public Patient(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
 }
 
