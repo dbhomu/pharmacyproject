@@ -1,14 +1,18 @@
 package models;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
     import java.time.LocalDate;
     import java.util.ArrayList;
 
     public class DatabaseManager {
 
-        private static final String URL = "jdbc:mysql://localhost:3306/pharmacyDB";
-        private static final String USER = "root";
-        private static final String PASS = "Mu$abGmai1";
+        private static final Dotenv dotenv = Dotenv.load();
+
+        private static final String URL  = dotenv.get("DBURL");
+        private static final String USER = dotenv.get("DBUSER");
+        private static final String PASS = dotenv.get("DBPASSWORD");
 
         public static ArrayList<Patient> searchPatient(
                 String firstName, String lastName, LocalDate DOB, String phoneNumber, String street1,
@@ -17,7 +21,7 @@ import java.sql.*;
 
             ArrayList<Patient> results = new ArrayList<>();
 
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
+            try (Connection conn = DriverManager.getConnection(URL,USER,PASS)) {
 
                 // Normalize NULL -> "" to avoid .isEmpty() crash
                 firstName = firstName == null ? "" : firstName.trim();

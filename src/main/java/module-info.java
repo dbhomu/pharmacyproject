@@ -17,6 +17,7 @@ module com.example.javafx {
     requires com.fasterxml.jackson.databind;
     requires jdk.httpserver;
     requires com.google.gson;
+    requires java.dotenv;
 
     opens com.example.javafx to javafx.fxml;
     opens models to com.google.gson;
