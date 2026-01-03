@@ -71,7 +71,7 @@ public class ModifyPatientController {
             Patient p = new Patient();
             p.setFirstName(firstNameField.getText());
             p.setLastName(lastNameField.getText());
-            p.setDOB(LocalDate.parse(dateText, dateTimeFormatter));
+            p.setDOB(dobField.getText());
             p.setGender(genderComboBox.getValue());
             p.setPhoneNumber(phoneNumberField.getText());
             p.setStreet1(street1Field.getText());
@@ -105,8 +105,8 @@ public class ModifyPatientController {
         firstNameField.setText(patient.getFirstName());
         lastNameField.setText(patient.getLastName());
 
-        if (patient.getDOB() != null) {
-            dobField.setText(patient.getDOB().format(dateTimeFormatter));
+        if (patient.getDOB() != null && !patient.getDOB().isEmpty()) {
+            dobField.setText(patient.getDOB());
         } else {
             dobField.clear();
         }

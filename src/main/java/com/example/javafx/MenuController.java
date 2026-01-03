@@ -1,6 +1,9 @@
 package com.example.javafx;
+import com.google.gson.*;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+import java.io.StringReader;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import javafx.application.Platform;
@@ -25,10 +28,12 @@ import models.*;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -49,7 +54,7 @@ public class MenuController implements Initializable {
     @FXML
     private TableColumn<Prescription, String> rxNumberCol;
     @FXML
-    private TableColumn<Prescription, LocalDate> fillDateCol;
+    private TableColumn<Prescription, String> fillDateCol;
     @FXML
     private TableColumn<Prescription, String> dispensedProductCol;
     @FXML
@@ -82,14 +87,16 @@ public class MenuController implements Initializable {
 
     private Patient currentPatient;
 
-   private final ObservableList<Prescription> queueList = FXCollections.observableArrayList();
+    private final ObservableList<Prescription> queueList = FXCollections.observableArrayList();
+
     // ----------- Initialization -----------
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupProfileImage();
         setupPrescriptionTable();
 
-        queueTable.setItems(queueList);
+        // We need to initialize the queue table because a tableview needs an ObservableList, all the columns, and the Timing
+        queueTable.setItems(queueList); // JAVA listens to changes on this line otherwise no rows would EVER exist.
         queueLastNameCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPatient().getLastName())
         );
@@ -106,13 +113,12 @@ public class MenuController implements Initializable {
                         java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 )
         );
-
         startHttpServerInBackground();
-
-
     }
 
-    // ----------- Methods -----------
+    // --- Starting Server ---
+    //this method is required because if we just ran startHttpServer the initialize method would never complete, we need
+    // a new thread because JAVAFX has a special thread known as the JavaFX Application Thread, we need to start a new thread.
     public void startHttpServerInBackground() {
         new Thread(() -> {
             try {
@@ -131,102 +137,70 @@ public class MenuController implements Initializable {
     }
 
     private void handlePrescription(HttpExchange exchange) throws IOException {
+        if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+            exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+            return;
+        }
+
+        String json = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+
         try {
-            // 1. Read the data
-            InputStream is = exchange.getRequestBody();
-            String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            // Gson with LocalDateTime and LocalDate adapters
+            Gson gson = new GsonBuilder()
+                    // Use HierarchyAdapter for LocalDate
+                    .registerTypeHierarchyAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+                        @Override
+                        public JsonElement serialize(LocalDate src, Type t, JsonSerializationContext c) {
+                            return new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+                        }
+                    })
+                    .registerTypeHierarchyAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+                        @Override
+                        public LocalDate deserialize(JsonElement json, Type t, JsonDeserializationContext c) {
+                            return LocalDate.parse(json.getAsString(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                        }
+                    })
+                    // Use HierarchyAdapter for LocalDateTime
+                    .registerTypeHierarchyAdapter(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
+                        @Override
+                        public JsonElement serialize(LocalDateTime src, Type t, JsonSerializationContext c) {
+                            return new JsonPrimitive(src.format(DateTimeFormatter.ISO_DATE_TIME));
+                        }
+                    })
+                    .registerTypeHierarchyAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                        @Override
+                        public LocalDateTime deserialize(JsonElement json, Type t, JsonDeserializationContext c) {
+                            return LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME);
+                        }
+                    })
+                    .create();
 
-            // 2. Parse JSON (Make sure your GSON matches the incoming JSON structure)
-            Gson gson = new Gson();
-            PrescriptionJson json = gson.fromJson(body, PrescriptionJson.class);
-
-            // 3. Convert to your Model objects
-            // (Assuming you have a constructor that matches these)
-            Drug drug = new Drug(json.drug.drugName, json.drug.drugStrength);
-
-            // Use a default date if your string parsing is failing for now
-            LocalDate dob = LocalDate.now();
-            try {
-                dob = LocalDate.parse(json.patient.DOB, DateTimeFormatter.ofPattern("MMddyyyy"));
-            } catch (Exception e) {
-                System.err.println("DOB Parse failed, using default.");
-            }
-
-            Patient patient = new Patient(json.patient.firstName, json.patient.lastName, dob, json.patient.gender, json.patient.phoneNumber, json.patient.street1, json.patient.street2, json.patient.city, json.patient.state, json.patient.ZIP, json.patient.country);
 
 
-            Prescription newRx = new Prescription(patient, null, drug, null, json.sig, String.valueOf(json.refills), null, null, null, 0, null, null, json.prescriptionType, json.isElectronic);
 
-            // 4. THE MAGIC FIX: Update the UI on the correct thread
-            Platform.runLater(() -> {
-                try {
-                    // Add to the ObservableList, NOT the table directly
-                    queueList.add(newRx);
-                    System.out.println("Success! Queue size: " + queueList.size());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            // Deserialize JSON into Prescription object
+            Prescription prescription = gson.fromJson(json, Prescription.class);
 
-            // 5. Send success back to Postman/Client
-            String response = "Prescription Received!";
-            exchange.sendResponseHeaders(200, response.length());
+            // Add to queue safely on JavaFX thread
+            Platform.runLater(() -> queueList.add(prescription));
+
+            String response = "Prescription received for patient: " +
+                    prescription.getPatient().getFirstName() + " " +
+                    prescription.getPatient().getLastName();
+
+            exchange.sendResponseHeaders(200, response.getBytes().length);
             exchange.getResponseBody().write(response.getBytes());
+            exchange.close();
 
         } catch (Exception e) {
-            System.err.println("CRITICAL ERROR IN PARSING:");
-            e.printStackTrace(); // This will tell you exactly which line is failing
-            exchange.sendResponseHeaders(500, 0);
-        } finally {
+            e.printStackTrace();
+            String response = "Invalid JSON or failed to parse.";
+            exchange.sendResponseHeaders(400, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
             exchange.close();
         }
     }
 
-    // JSON helper classes (only String fields)
-    public static class PrescriptionJson {
-        public PatientJson patient;
-        public PrescriberJson prescriber;
-        public DrugJson drug;
-        public String sig;
-        public Integer refills;
-        public String prescriptionType;
-        public boolean isElectronic;
-    }
-
-    public static class PatientJson {
-        public String firstName;
-        public String lastName;
-        public String DOB; // string from JSON
-        public String gender;
-        public String phoneNumber;
-        public String street1;
-        public String street2;
-        public String city;
-        public String state;
-        public String ZIP;
-        public String country;
-        public String allergies;
-    }
-
-    public static class PrescriberJson {
-        public String firstName;
-        public String lastName;
-        public String NPI;
-        public String DEA;
-        public String phoneNumber;
-        public String faxNumber;
-        public String street1;
-        public String street2;
-        public String city;
-        public String state;
-        public String ZIP;
-        public String country;
-    }
-
-    public static class DrugJson {
-        public String drugName;
-        public String drugStrength;
-    }
 
 
 

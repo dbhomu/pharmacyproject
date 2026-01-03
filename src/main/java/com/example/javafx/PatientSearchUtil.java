@@ -17,20 +17,25 @@ public class PatientSearchUtil {
 
         String firstName = "";
         String lastName = "";
-        LocalDate DOB = null;
+        String DOB = ""; // Changed from null to empty String
         String phoneNumber = "";
 
         for (String part : parts) {
+            // This regex looks for MM/dd/yyyy
             if (part.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
-                DOB = LocalDate.parse(part, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                // No need to parse it into a LocalDate object here!
+                // Just save the String as it is.
+                DOB = part;
             } else if (part.matches("\\d+")) {
                 phoneNumber = part;
             } else {
+                // If it's not a date or phone number, assume it's a name
                 if (lastName.isEmpty()) lastName = part;
                 else if (firstName.isEmpty()) firstName = part;
             }
         }
 
-        return db.searchPatient(firstName, lastName, DOB, phoneNumber,"","","","","","");
+        // Now passing the String DOB into your updated db method
+        return db.searchPatient(firstName, lastName, DOB, phoneNumber, "", "", "", "", "", "");
     }
 }

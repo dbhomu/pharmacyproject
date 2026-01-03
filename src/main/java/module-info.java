@@ -18,6 +18,7 @@ module com.example.javafx {
     requires jdk.httpserver;
     requires com.google.gson;
     requires java.dotenv;
+    requires jakarta.xml.bind;
 
     opens com.example.javafx to javafx.fxml;
     opens models to com.google.gson;

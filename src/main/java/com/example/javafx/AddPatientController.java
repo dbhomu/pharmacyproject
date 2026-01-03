@@ -44,7 +44,7 @@ import java.time.format.DateTimeParseException;
         @FXML
         private TableColumn<Patient, String> lastNameCol;
         @FXML
-        private TableColumn<Patient, LocalDate> dobCol;
+        private TableColumn<Patient, String> dobCol;
         @FXML
         private TableColumn<Patient, String> phoneNumberCol;
         @FXML
@@ -69,28 +69,28 @@ import java.time.format.DateTimeParseException;
 
         @FXML
         private void addPatientButton(ActionEvent event) {
-            // Validate DOB
             if (dobField.getText().isEmpty()) {
                 showAlert("Date of birth is required!");
                 return;
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-            LocalDate dob;
 
+            // Still validate the date here! This ensures the String is a REAL date
+            // before we save it as a String.
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
             try {
-                dob = LocalDate.parse(dobField.getText(), formatter);
+                LocalDate.parse(dobField.getText(), formatter);
             } catch (DateTimeParseException e) {
                 showAlert("Invalid date format! Use MM/DD/YYYY");
                 return;
             }
 
             try {
-
+                // This call has 11 arguments. We need a matching constructor in Patient.java
                 Patient patient = new Patient(
                         firstNameField.getText(),
                         lastNameField.getText(),
-                        dob,
-                        null,
+                        dobField.getText(),    // String DOB
+                        null,                  // gender
                         phoneNumberField.getText(),
                         street1Field.getText(),
                         street2Field.getText(),
@@ -101,13 +101,13 @@ import java.time.format.DateTimeParseException;
                 );
 
                 db.addPatient(patient);
+                showAlert("Patient added successfully!");
+                clearFields();
             } catch (RuntimeException e) {
                 showAlert(e.getMessage());
             }
-            showAlert("Patient added successfully!");
-            clearFields();
         }
-
+        // We need to make this showAlert method in legit every class because the showAlert thing won't work if it's not here LOL
         private void showAlert(String message) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText(message);

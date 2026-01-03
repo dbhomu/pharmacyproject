@@ -56,7 +56,7 @@ public class RefineParametersController {
     @FXML
     private TableColumn<Patient, String> lastNameCol;
     @FXML
-    private TableColumn<Patient, LocalDate> dobCol;
+    private TableColumn<Patient, String> dobCol;
     @FXML
     private TableColumn<Patient, String> phoneNumberCol;
     @FXML
@@ -200,7 +200,7 @@ public class RefineParametersController {
         ArrayList<Patient> results = db.searchPatient(
                 firstNameField.getText(),
                 lastNameField.getText(),
-                dob,
+                dobField.getText(),
                 phoneNumberField.getText(),
                 street1Field.getText(),
                 street2Field.getText(),

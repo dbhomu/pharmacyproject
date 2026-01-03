@@ -3,8 +3,10 @@ package models;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.*;
-    import java.time.LocalDate;
-    import java.util.ArrayList;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
     public class DatabaseManager {
 
@@ -15,7 +17,7 @@ import java.sql.*;
         private static final String PASS = dotenv.get("DBPASSWORD");
 
         public static ArrayList<Patient> searchPatient(
-                String firstName, String lastName, LocalDate DOB, String phoneNumber, String street1,
+                String firstName, String lastName, String DOB, String phoneNumber, String street1,
                 String street2, String city, String state,
                 String ZIP, String country) {
 
@@ -38,7 +40,7 @@ import java.sql.*;
 
                 if (!firstName.isEmpty()) sql += " AND firstName LIKE ?";
                 if (!lastName.isEmpty()) sql += " AND lastName LIKE ?";
-                if (DOB != null) sql += " AND DOB LIKE ?";
+                if (DOB != null) sql += " AND DOB = ?";
                 if (!phoneNumber.isEmpty()) sql += " AND phoneNumber LIKE ?";
                 if (!street1.isEmpty()) sql += " AND street1 LIKE ?";
                 if (!street2.isEmpty()) sql += " AND street2 LIKE ?";
@@ -52,7 +54,17 @@ import java.sql.*;
 
                 if (!firstName.isEmpty()) ps.setString(index++, firstName + "%");
                 if (!lastName.isEmpty()) ps.setString(index++, lastName + "%");
-                if (DOB != null) ps.setObject(index++, DOB + "%");
+                if (DOB != null && !DOB.isEmpty()) {
+                    // 1. Define the pattern the user typed in the UI
+                    DateTimeFormatter uiFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+                    // 2. Parse that string into a LocalDate object (the "Internal" format)
+                    LocalDate ld = LocalDate.parse(DOB, uiFormatter);
+
+                    // 3. Hand it to the PreparedStatement as a SQL Date
+                    // This automatically converts it to YYYY-MM-DD for the database!
+                    ps.setDate(index++, java.sql.Date.valueOf(ld));
+                }
                 if (!phoneNumber.isEmpty()) ps.setString(index++, phoneNumber + "%");
                 if (!street1.isEmpty()) ps.setString(index++, street1 + "%");
                 if (!street2.isEmpty()) ps.setString(index++, street2 + "%");
@@ -60,7 +72,7 @@ import java.sql.*;
                 if (!state.isEmpty()) ps.setString(index++, state + "%");
                 if (!ZIP.isEmpty()) ps.setString(index++, ZIP + "%");
                 if (!country.isEmpty()) ps.setString(index++, country + "%");
-
+                DateTimeFormatter uiFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
@@ -75,7 +87,9 @@ import java.sql.*;
                     // Handle the Date safely
                     Date dobColumn = rs.getDate("DOB");
                     if (dobColumn != null) {
-                        patient.setDOB(dobColumn.toLocalDate());
+                        // Turn SQL Date -> LocalDate -> String (MM/dd/yyyy)
+                        String formattedDob = dobColumn.toLocalDate().format(uiFormatter);
+                        patient.setDOB(formattedDob);
                     }
 
                     patient.setGender(rs.getString("gender"));
@@ -311,14 +325,12 @@ import java.sql.*;
                     prescription.setSIG(rs.getString("SIG"));
                     prescription.setRefills(rs.getString("refills"));
 
+
                     // 2. NOW YOU CAN GRAB THE QUANTITY (The "20")
                     prescription.setPrescribedQuantity(rs.getInt("prescribedQuantity"));
 
                     // Get the SQL date, then convert it to the modern LocalDate
-                    Date sqlDate = rs.getDate("fillDate");
-                    if (sqlDate != null) {
-                        prescription.setFillDate(sqlDate.toLocalDate());
-                    }
+
 
                     prescription.setDrug(drug);
                     prescription.setPrescriber(prescriber);

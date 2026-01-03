@@ -6,7 +6,7 @@ public class Patient {
     private String patientID;
     private String firstName;
     private String lastName;
-    private LocalDate DOB;
+    private String DOB;
     private String gender;
     private String phoneNumber;
     private String street1;
@@ -17,12 +17,12 @@ public class Patient {
     private String country;
     private String allergies;
 
-    public Patient(String firstName, String lastName, LocalDate DOB) {
+    public Patient(String firstName, String lastName, String DOB) {
         setFirstName(firstName);
         setLastName(lastName);
         setDOB(DOB);
     }
-    public Patient(String firstName, String lastName, LocalDate DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country, String allergies) {
+    public Patient(String firstName, String lastName, String DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country, String allergies) {
 
         setFirstName(firstName);
         setLastName(lastName);
@@ -45,7 +45,7 @@ public class Patient {
             String patientID,
             String firstName,
             String lastName,
-            LocalDate dob,
+            String DOB,
             String gender,
             String phoneNumber,
             String street1,
@@ -56,33 +56,20 @@ public class Patient {
             String country,
             String allergies
     ) {
-        this(firstName, lastName, dob, gender, phoneNumber, street1, street2, city, state, ZIP, country, allergies);
+        this(firstName, lastName, DOB, gender, phoneNumber, street1, street2, city, state, ZIP, country, allergies);
         this.patientID = patientID;
     }
 
     // Constructor for search (no gender, no allergies)
-    public Patient(String patientID, String firstName, String lastName, LocalDate dobValue,
+    public Patient(String patientID, String firstName, String lastName, String DOB,
                    String phoneNumber, String street1, String street2,
                    String city, String state, String zip, String country) {
-        this(patientID, firstName, lastName, dobValue,
+        this(patientID, firstName, lastName, DOB,
                 null, // gender
                 phoneNumber, street1, street2, city, state, zip, country,
                 null); // allergies
     }
 
-    public Patient(String firstName, String lastName, LocalDate DOB, String gender, String phoneNumber, String street1, String street2, String city, String state, String ZIP, String country) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.DOB = DOB;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.street1 = street1;
-        this.street2 = street2;
-        this.city = city;
-        this.state = state;
-        setZIP(ZIP);
-        this.country = country;
-    }
 
     public String getPatientID() {
         return patientID;
@@ -114,11 +101,11 @@ public class Patient {
         this.lastName = lastName;
     }
 
-    public LocalDate getDOB() {
+    public String getDOB() {
         return DOB;
     }
 
-    public void setDOB(LocalDate DOB) {
+    public void setDOB(String DOB) {
         if (DOB == null) {
             throw new RuntimeException("Date of birth Required!");
         }

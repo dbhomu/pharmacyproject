@@ -11,7 +11,6 @@ import models.DatabaseManager;
 import models.Patient;
 import models.Prescription;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PatientProfileController {
@@ -21,7 +20,7 @@ public class PatientProfileController {
     @FXML
     private TableColumn<Prescription, String> rxNumberCol;
     @FXML
-    private TableColumn<Prescription, LocalDate> fillDateCol;
+    private TableColumn<Prescription, String> fillDateCol;
     @FXML
     private TableColumn<Prescription, String> dispensedProductCol;
     @FXML
@@ -46,7 +45,7 @@ public class PatientProfileController {
     public void loadPrescriptionsInto(Patient patient) {
         // Set up columns (once ideally in initialize())
         rxNumberCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRxNumber()));
-        fillDateCol.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getFillDate()));
+        fillDateCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFillDate()));
         dispensedProductCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDrug().getDrugName()));
         ndcCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDrug().getDrugNDC()));
         qtyCol.setCellValueFactory(cellData ->
